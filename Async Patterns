@@ -1,0 +1,211 @@
+Async Patterns
+
+Paralled vs Async
+
+parallel is like rollar coasters - 2 or more tasks happening at the same time.
+
+JS is single thread!
+Event loop is how we model notation of asynchonory
+Servo --- trying to parallelize
+https://github.com/servo/servo
+
+Concurrency - 2 or more tasks are happening in the same time frame.
+ need to coordinate the response
+
+Callbacks
+-reEntry point on when our code resumes
+callbacks === contiuations
+
+stuff that happens now (synchrous) and stuff that happens later
+expressing temporal sets
+
+callbackhell has nothing to do with nesting and indentations
+
+-have to manage state over time
+
+callbackhell 
+-inversion of control (IOC)
+pg21
+line 1 and line 2 we have control
+line 3 and 4 we have given control to someone else
+
+non- linear, non-sequental 
+callbacks 
+
+Sync-looking Async
+Synchronous sequentail blocking
+
+non-fixes:
+success functions
+error functions
+error-first style(if-else branching)
+
+******* THUNKS ************
+not js concept
+originally a synchroous thought
+basically a function that has everything that it needs to perform a task its supposed to do
+based on notion of closure
+
+giving a callback a memory by the process of closure
+eliminatae time as a notion we have to keep track of
+
+maganging state over time... time is the most complex and most difficult to keep track of
+
+lazy thunk ... slide 40
+	no race condtions
+
+eager thunk ...
+	-start doing the work now
+	-we might get answer back before its asked for. we must store it
+	-store information in a closure
+
+
+
+Promises - a wrapper around future values /completion events
+	built to address all trust issues
+	2 callbacks now!
+	callback management system
+	trustable and auditable
+
+
+
+function foo(x,y,cb){
+	// cb(answer);
+
+}
+function fooPromiseied(x,y){
+	return new Proise(function(resolve,reject){
+		foo(x,y,function(err, answer){
+			if(err) reject(err);
+			else resolve(answer);
+		});
+	})
+}
+
+foo(10,20,function(err, answer){
+	if (err) console.log(err);
+	else console.log(answer);
+});
+
+fooPromisified(10,20)
+	.then(
+		function(answer){
+			console.log(answer);
+		},
+		function(err){
+			console.log(err);
+		}
+	);
+
+var fooPromisfied = Q.lift(foo); //promisify function without having to do it yourself
+
+*********** FLOW CONTROL *****************
+//theres stuff much better than this
+
+you can chain promises -- fluent apis (jquery)
+in first callback success -> return a promise
+have one error handler at end
+promises always return 2 things... fullfillment or rejection
+
+promise hell happens when you nest it/chain on chain
+//better to keep it as below
+delay(100)
+	.then(function(){
+		return delay(50);
+	})
+	.then(function(){
+		return delay(200)
+	})
+	.then(complete);
+
+
+ ************ ABSTRACTIONS ***************
+ Promise.all() takes an array of promises and waits for all promises to resolve in any order before it moves on
+ can enforce the order
+ if any reject.. then all promises reject and any fullfillmemnts are ignored
+ don't use empty arrays!
+ any function that doesn't have a promise will be lifted so the result will be a promise
+
+ Promise.race() takes a arraay of promisis, and waits for the first proimse to finish and that is the promise that is returne then  all other promises are disgarded
+
+sequence = automatically chained promises
+
+https://github.com/getify/asynquence
+
+under the converes the chain is being called for you
+.gate(
+//things that happen in here are done in parallel
+)
+
+each step/method is named (polymorphic) for what its supposed to do
+.seq //like .then
+way to start a sequence ASQ()
+
+
+************ GENERATORS (yield) ******************
+generators pause at 'yield'
+generators are a message passing system
+
+generator is a two-way message passing system
+coroutine ==== .next()
+generators don't have to finish
+its ok to have them only half way finish
+
+giving us a pattern for synchours looking - asynchours code
+
+
+generators + promises
+yield promoise
+
+davidwalsh.name/es6-generators
+
+********* CONCURRECY : EVENTS ( + PROMISES)  ***************
+
+event based programmig needs to reach for a different abstraction than promises
+
+pattern to look for ******OBSERVABLES********
+http://rxmarbles.com/
+spreadsheet 
+piece of data coming in --> 1+ items in length --> serious of steps (instant/async) 
+
+reactive extensions have several languages
+
+fromEvent(dom elemnt. 'event');
+
+downside of rx === very large!
+
+so asynquence reactive sequences was created
+
+
+********* CONCURRENCY ( + CHANNELS) ***********
+
+CSP: Communicating Sequential Processes
+	go-style concurrency
+
+a channel can only have one stream at a time (buffer size 1)
+two way message system
+two seperate independent operatinos thta use blocking
+doesn't have time race issues become of blocking semantic
+
+
+todomvc
+ for async
+ a tale of three lists
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,31 @@
+Chrome dev tools
+
+cmd + shift + p shows you all functions in the file
+
+in call stacl
+right click --- blackbox script. that way all the other files but yours  disappear
+
+
+console.groupCollapsed('blah  lha');
+
+console.groupEnd();
+
+console.log('%cChrome deyTools rullleez', 'font-size:40px; color:green');
+
+console.table() --- shows an array of items in the console
+console.table(characters, ['id', displayNmae]); 2nd paramter is the colum names
+
+document.body.contentEditable = true
+
+allows everything on the page to become editable
+
+network.. no throttlig -- can choose your nework
+video camera captures screen shots at diffrent times the page loads
+
+... dots --> settings
+-->experiments (google add exprermiets to dev tools) --> allow custom ui themes
+close and open console. and you have dark theme
+
+
+sources -- snippets. -- new.
+you can code inside the browser and then run the snippet

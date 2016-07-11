@@ -1,0 +1,27 @@
+github/scientist
+
+branch by abstraction
+
+tests are not enough
+	- cumbersome and slows down development
+	- software has bugs --- therefore your data will have bugs
+
+Data quality
+	- bugs may occur because you don't  expect data to behave in 'that' way
+
+production data is the only true data you should test against
+
+branch by abstraction + dark shipping
+
+
+caveat - not meant to be sused for any code that has side-effects
+ -modififies data ( don't use)
+ -don't use in production because of performance
+ should use for boolean methods
+
+ can configure results to display certain items
+
+ scientist has become a popular pattern at github
+
+ has been ported to other languages
+ 
