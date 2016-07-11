@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+    <title>APM</title>
+    <base href="/">
+
+    <meta charset="utf-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html"/>
+
+    <script type="application/javascript" src="/bower_components/jwt-decode/build/jwt-decode.min.js"></script>
+    <script type="application/javascript" src="scripts/environment.js"></script>
+    <script type='application/javascript' src='/cf-routes.js'></script>
+	<script type='application/javascript' src='/feature-flags.js'></script>
+
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+
+
+
+    <!-- APM Styles -->
+    <!--<link rel="stylesheet" href="/stylesheets/app.css"/>-->
+
+    <link rel="stylesheet" href="/bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+    <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+
+	<!-- Angular-UI-Grid Styles-->
+	<link rel="stylesheet" href="/bower_components/bower-ui-grid/ui-grid.css"/>
+	<!--<link rel="stylesheet" href="/bower_components/bower-ui-grid/apm/css/ui-grid-extend.css"/>-->
+	<!--<link rel="stylesheet" href="/bower_components/bower-ui-grid/apm/css/ui-grid-define.css"/>-->
+
+    <!-- Enables internationalization -->
+    <script type="text/javascript" src="/api/v2/messages.js"></script>
+    <script type="application/javascript" src="/bower_components/px/src/px.js"></script>
+
+    <!-- Just needed for IE -->
+    <script src="/bower_components/es6-promise/promise.min.js"></script>
+
+    <script src="/bower_components/apm-container-api/apm-container-api.js"></script>
+
+	<!--  UM imports -->
+	<script type="text/javascript" src="/scripts/config/config-manager.js"></script>
+
+	<!-- Include all the polymer elements definitions in these two files polymer-loader.html & polymer-loader.vulcanized.html.
+	use polymer-loader.html for non vulcanized version
+	  -->
+	<link rel="import" href="/polymer-loader.vulcanized.html">
+
+	<!-- script tag here to remove JQuery issue of firing eventListener duplicate times-->
+	<script>
+		window.addEventListener('Notification', function(event){
+			console.log('NOTIFICATION ERROR: ' + JSON.stringify(event.detail));
+			console.log('status', event.detail.status);
+		});
+
+		function NotificationEvent(){
+			this.detail =  'undefined';
+
+		}
+	</script>
+
+</head>
+
+<body class="app" data-ng-controller="MainCtrl">
+
+<!-- Adds implicit grant oauth -->
+<px-oauth
+    site="site"
+    client-id="clientId"
+    redirect-uri="redirectUri"
+    ng-hide="true">
+</px-oauth>
+
+<ui-view/>
+
+<div id="dispatch_event"></div>
+<script>
+/*
+  IE11 workaround: We can't rely on IE's load order for scripts that are loaded outside of require.js (might
+  be an issue with the web components polyfill), so we wait for the HTMLImportsLoaded event to ensure our
+  web components' scripts have loaded.
+*/
+window.addEventListener('HTMLImportsLoaded', function(e) {
+	 window._fireEvent.call(this, window.__ON_PAGE_LOADED__);
+});
+/*
+ * Synchronous load requirejs after having the tenancy info
+ */
+window._bootstrapid = '__bootstrap__';
+window.addEventListener(window.__ON_TENANCY_LOADED__, function(e) {
+	if(!document.getElementById(window._bootstrapid)) {
+        //Load app.css APM Styles
+        var apmcssLink = document.createElement("link");
+        apmcssLink.type = "text/css";
+        apmcssLink.rel = "stylesheet";
+        apmcssLink.href = "/stylesheets/app.css";
+        document.getElementsByTagName("head")[0].appendChild(apmcssLink);
+
+        var elScript = document.createElement('script');
+	    elScript.setAttribute('src', 'bower_components/requirejs/require.js');
+	    elScript.setAttribute('data-main', 'scripts/bootstrapper.js');
+	    elScript.setAttribute('id', window._bootstrapid);
+	    document.getElementsByTagName('body')[0].appendChild(elScript);
+	}
+});
+</script>
+
+
+</body>
+</html>
