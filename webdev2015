@@ -1,0 +1,43 @@
+access key
+4b9d6ae3-796f-460f-ad22-cf32a96d2445
+
+proxy
+http://myapps.setpac.ge.com/pac.pac
+
+wifi password: 036C47
+
+--creating templates
+barhandler
+mustache
+
+
+Ios design pattern
+-delegate
+  formal, scales poorly
+
+-target-action
+  used by system controls
+  scales easliy
+
+-blocks
+
+-immutability
+  more efficiant
+  intrinsically thread safe
+  getter methods only
+    read only properties, set ivar in -initWithSomething: or lazily
+  implement -copy to return self
+  inconvienent to amke your own mutuable subclass
+    expose methods like -valueByChangingValue
+
+-Class clusters
+
+
+fuckingblocksyntax.com
+fuckingswiftblocksyntax.com
+curatedcocoa.com
+
+
+CI tools
+-xcode bots
+-circle CI
